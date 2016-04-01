@@ -6,6 +6,7 @@ Created on Wed Mar 30 22:47:51 2016
 """
 import sexmachine.detector as gender
 import pandas as pd
+import numpy as np
 path="C:\\Users\\hardy_000\\Documents\\SanFranSal\\Salaries.csv"
 data=pd.read_csv(path)
 data.columns = map(str.lower, data.columns)
@@ -16,3 +17,7 @@ firstname=data.employeename.apply(lambda x: x.partition(' ')[0])
 firstname=firstname.str.lower()
 firstname=firstname.str.title()
 gender=firstname.apply(lambda row: d.get_gender(row))
+gender[gender=="andy"]="unknown"
+data["sex"]=gender
+genderGroup=data.groupby(["sex","year"])
+data.select_dtypes(exclude=[np.number])
