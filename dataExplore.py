@@ -23,6 +23,7 @@ firstname=firstname.str.title()
 gender=firstname.apply(lambda row: d.get_gender(row))
 gender[gender=="andy"]="unknown"
 data["sex"]=gender
+data = data.sort_values(by="totalpay", ascending=False)
 genderGroup=data.groupby(["sex","year"])
 data["basepay"]=pd.to_numeric(data["basepay"],errors="coerce")
 data=data.fillna(0)
@@ -34,3 +35,21 @@ f, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 4))
 sns.distplot(men.basepay, bins = 50, kde=False,ax=ax1)
 sns.distplot(women.basepay, bins = 50, kde=False,ax=ax2)
 
+
+dfp = data.groupby('year').mean();
+plt1 = dfp.plot(kind='bar');
+
+print(plt1)
+
+dfg=data.groupby('jobtitle')
+dfp = dfg.mean();
+dfp=dfp.sort_values(by="totalpay",ascending=False)
+dfp2=dfp.ix[1:25]
+plt2 = dfp2.plot(kind='bar');
+
+print(plt2)
+
+dfg2=data.groupby(['year','jobtitle'])
+dfp2 = dfg2.mean();
+dfp3=dfp2.ix[1:25]
+plt2 = dfp3.plot(kind='bar');
