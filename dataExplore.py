@@ -40,16 +40,13 @@ dfp = data.groupby('year').mean();
 plt1 = dfp.plot(kind='bar');
 
 print(plt1)
-
-dfg=data.groupby('jobtitle')
+sexyear=data[['totalpay','year','sex']]
+sexyear['sex'][sexyear['sex']=='mostly_male']='male'
+sexyear['sex'][sexyear['sex']=='mostly_female']='female'
+sexyear["totalpay"]=pd.to_numeric(data["totalpay"],errors="coerce")
+sexyear=sexyear.fillna(0)
+dfg=sexyear.groupby(['sex','year'])
 dfp = dfg.mean();
-dfp=dfp.sort_values(by="totalpay",ascending=False)
-dfp2=dfp.ix[1:25]
-plt2 = dfp2.plot(kind='bar');
+plt2=dfp.unstack(level=1).plot(kind='bar')
 
-print(plt2)
-
-dfg2=data.groupby(['year','jobtitle'])
-dfp2 = dfg2.mean();
-dfp3=dfp2.ix[1:25]
-plt2 = dfp3.plot(kind='bar');
+#print(plt2)
