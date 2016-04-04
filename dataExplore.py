@@ -47,6 +47,7 @@ sexyear["totalpay"]=pd.to_numeric(data["totalpay"],errors="coerce")
 sexyear=sexyear.fillna(0)
 dfg=sexyear.groupby(['sex','year'])
 dfp = dfg.mean();
-plt2=dfp.unstack(level=1).plot(kind='bar')
 
+dfp.reset_index(inplace=True)
+sns.barplot(x='year',y='totalpay',hue='sex',data=dfp)
 #print(plt2)
