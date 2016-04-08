@@ -31,23 +31,26 @@ men=data[(data["sex"]=="male") | (data["sex"]=="mostly_male")]
 women=data[(data["sex"]=="female") | (data["sex"]=="mostly_female")]
 data["basepay"] = data["basepay"].replace('[^0-9]+.-', '', regex=True)
 
-f, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 4))
-sns.distplot(men.basepay, bins = 50, kde=False,ax=ax1)
-sns.distplot(women.basepay, bins = 50, kde=False,ax=ax2)
+#f, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 4))
+plt1=sns.distplot(men.basepay, bins = 50, kde=False)
+plt.show()
+pl2=sns.distplot(women.basepay, bins = 50, kde=False)
+plt.show()
 
 
 dfp = data.groupby('year').mean();
-plt1 = dfp.plot(kind='bar');
 
-print(plt1)
 sexyear=data[['totalpay','year','sex']]
-sexyear['sex'][sexyear['sex']=='mostly_male']='male'
-sexyear['sex'][sexyear['sex']=='mostly_female']='female'
-sexyear["totalpay"]=pd.to_numeric(data["totalpay"],errors="coerce")
+
+sexyear.loc[sexyear['sex']=='mostly_male','sex']='male'
+sexyear.loc[sexyear['sex']=='mostly_female','sex']='female'
+sexyear.loc[:,'totalpay']=pd.to_numeric(data["totalpay"],errors="coerce")
 sexyear=sexyear.fillna(0)
 dfg=sexyear.groupby(['sex','year'])
 dfp = dfg.mean();
 
-dfp.reset_index(inplace=True)
-sns.barplot(x='year',y='totalpay',hue='sex',data=dfp)
-#print(plt2)
+dfp=dfp.reset_index(drop=False)
+#f, ax3 = plt.plot()
+plt3=sns.barplot(x='year',y='totalpay',hue='sex',data=dfp)
+plt.show()
+
